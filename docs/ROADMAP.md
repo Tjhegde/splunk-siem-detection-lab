@@ -46,7 +46,7 @@ This roadmap tracks the development of the Splunk SIEM Detection & Incident Inve
 * [ ] Create Sigma versions of selected detections
 * [ ] Build SOC investigation dashboard
 * [ ] Validate detections against generated activity
-* [ ] Capture sanitized screenshots of searches, alerts, and dashboards
+* [ ] Capture screenshots of searches, alerts, and dashboards
 
 ## Phase 6 — Incident Investigation and Containment
 
@@ -62,7 +62,7 @@ This roadmap tracks the development of the Splunk SIEM Detection & Incident Inve
 ## Phase 7 — Documentation and Portfolio Cleanup
 
 * [ ] Complete incident report
-* [ ] Add sanitized evidence and screenshots
+* [ ] Add screenshots
 * [ ] Review repository for sensitive information
 * [ ] Update README with final results
 * [ ] Mark project complete
