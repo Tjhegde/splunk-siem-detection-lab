@@ -1,0 +1,71 @@
+# =========================
+# Credentials / secrets
+# =========================
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.p12
+secrets/
+credentials/
+
+# Splunk credentials/config backups
+user-seed.conf
+passwd
+splunk.secret
+
+# =========================
+# Splunk runtime data
+# =========================
+*.log
+*.pid
+*.lock
+
+# =========================
+# Raw evidence / logs
+# =========================
+*.evtx
+*.pcap
+*.pcapng
+*.dmp
+*.raw
+
+# Large exports
+*.csv
+*.jsonl
+
+# =========================
+# Virtual machines
+# =========================
+*.vdi
+*.vmdk
+*.vhd
+*.vhdx
+*.ova
+*.ovf
+
+# =========================
+# Installers / ISOs
+# =========================
+*.iso
+*.msi
+*.deb
+*.rpm
+*.exe
+
+# =========================
+# Archives
+# =========================
+*.zip
+*.7z
+*.tar
+*.gz
+
+# =========================
+# Editor / OS files
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
