@@ -1,175 +1,68 @@
 # Project Roadmap
 
-This document tracks the planned development of the Splunk SIEM Detection & Incident Investigation Lab.
+This roadmap tracks the development of the Splunk SIEM Detection & Incident Investigation Lab.
 
-The roadmap may change as the project develops.
-
-## Phase 1 — Repository and Lab Planning
+## Phase 1 — Planning and Repository Setup
 
 * [x] Create GitHub repository
 * [x] Create initial repository structure
-* [x] Document project scope
-* [x] Document planned architecture
-* [x] Create architecture diagram
-* [x] Finalize lab IP-addressing scheme
-* [x] Document host-resource allocation
+* [x] Define project scope
+* [x] Define lab architecture and networking plan
 
-## Phase 2 — Splunk Server
+## Phase 2 — Build the SIEM Environment
 
-* [ ] Create Ubuntu virtual machine
-* [ ] Update Ubuntu
-* [ ] Install Splunk Enterprise
-* [ ] Configure Splunk service
-* [ ] Create Windows event index
-* [ ] Configure Splunk receiving port
-* [ ] Install Splunk Add-on for Microsoft Windows
-* [ ] Validate Splunk Web access
-* [ ] Document configuration
-
-## Phase 3 — Windows Endpoint
-
-* [ ] Create Windows 11 virtual machine
-* [ ] Create lab-only administrator account
-* [ ] Install operating-system updates
+* [ ] Create Ubuntu Splunk server VM
+* [ ] Install and configure Splunk Enterprise
+* [ ] Create Windows 11 endpoint VM
 * [ ] Install Splunk Universal Forwarder
-* [ ] Install or enable Sysmon
-* [ ] Enable Windows auditing
-* [ ] Enable PowerShell logging
-* [ ] Enable Task Scheduler logging
-* [ ] Configure Windows Event Log forwarding
-* [ ] Document endpoint configuration
+* [ ] Install and configure Sysmon
+* [ ] Enable Windows auditing and PowerShell logging
+* [ ] Configure isolated VirtualBox network
+* [ ] Verify connectivity between endpoint and Splunk
 
-## Phase 4 — Network Isolation
+## Phase 3 — Configure and Validate Telemetry
 
-* [ ] Create isolated VirtualBox internal network
-* [ ] Configure static Splunk server address
-* [ ] Configure static Windows endpoint address
-* [ ] Verify endpoint-to-Splunk connectivity
-* [ ] Verify Splunk receiving port connectivity
-* [ ] Remove unnecessary Internet connectivity
-* [ ] Verify lab isolation
+* [ ] Forward Windows Security logs
+* [ ] Forward Sysmon logs
+* [ ] Forward PowerShell logs
+* [ ] Forward Task Scheduler logs
+* [ ] Validate hosts, timestamps, and sourcetypes
+* [ ] Verify event ingestion and latency
 * [ ] Capture clean VM snapshots
 
-## Phase 5 — Data Ingestion
+## Phase 4 — Generate and Detect Suspicious Activity
 
-* [ ] Ingest Windows Security events
-* [ ] Ingest Sysmon events
-* [ ] Ingest PowerShell events
-* [ ] Ingest Task Scheduler events
-* [ ] Ingest Windows System events
-* [ ] Ingest Windows Application events
-* [ ] Validate hostnames
-* [ ] Validate timestamps
-* [ ] Validate sourcetypes
-* [ ] Measure ingestion latency
-* [ ] Document data sources
-
-## Phase 6 — Controlled Incident Generation
-
-* [ ] Generate failed authentication activity
-* [ ] Generate successful authentication activity
-* [ ] Create temporary local account
-* [ ] Add temporary account to Administrators
+* [ ] Generate controlled authentication activity
+* [ ] Create and privilege a temporary local account
 * [ ] Execute harmless encoded PowerShell
-* [ ] Execute system-discovery utilities
-* [ ] Create benign scheduled task
-* [ ] Confirm expected telemetry reaches Splunk
-* [ ] Preserve investigation evidence
+* [ ] Execute system-discovery commands
+* [ ] Create a benign scheduled task
+* [ ] Develop and validate SPL detections
+* [ ] Configure Splunk alerts
+* [ ] Document false positives and detection limitations
 
-## Phase 7 — SPL Detection Engineering
+## Phase 5 — Detection Engineering and Visualization
 
-* [ ] Create data-validation search
-* [ ] Create failed-logon burst detection
-* [ ] Create account-creation detection
-* [ ] Create privileged-group membership detection
-* [ ] Correlate account creation with administrator-group addition
-* [ ] Create encoded PowerShell detection
-* [ ] Create scheduled-task detection
-* [ ] Create discovery-command burst detection
-* [ ] Create ingestion-latency search
-* [ ] Document expected false positives
-* [ ] Document detection limitations
+* [ ] Create Sigma versions of selected detections
+* [ ] Build SOC investigation dashboard
+* [ ] Validate detections against generated activity
+* [ ] Capture sanitized screenshots of searches, alerts, and dashboards
 
-## Phase 8 — Alerting
+## Phase 6 — Incident Investigation and Containment
 
-* [ ] Convert validated searches into Splunk alerts
-* [ ] Configure alert severity
-* [ ] Configure scheduling
-* [ ] Configure throttling
-* [ ] Add analyst triage guidance
-* [ ] Trigger alerts using controlled activity
-* [ ] Capture sanitized alert evidence
+* [ ] Investigate authentication activity
+* [ ] Investigate account and privilege changes
+* [ ] Investigate PowerShell and process activity
+* [ ] Investigate scheduled-task activity
+* [ ] Reconstruct the incident timeline
+* [ ] Map observed behavior to MITRE ATT&CK
+* [ ] Remove the temporary account and scheduled task
+* [ ] Verify containment in Splunk
 
-## Phase 9 — Sigma Rules
+## Phase 7 — Documentation and Portfolio Cleanup
 
-* [ ] Write encoded PowerShell Sigma rule
-* [ ] Write local Administrators membership Sigma rule
-* [ ] Write scheduled-task Sigma rule
-* [ ] Document required log sources
-* [ ] Document required fields
-* [ ] Document false positives
-* [ ] Compare Sigma logic with corresponding SPL searches
-
-## Phase 10 — SOC Dashboard
-
-* [ ] Create investigation dashboard
-* [ ] Add total-event visualization
-* [ ] Add reporting-host visualization
-* [ ] Add events-by-source visualization
-* [ ] Add event-volume timeline
-* [ ] Add failed-logon panel
-* [ ] Add account-management panel
-* [ ] Add PowerShell panel
-* [ ] Add scheduled-task panel
-* [ ] Add discovery-command panel
-* [ ] Add ingestion-health panel
-* [ ] Capture sanitized dashboard screenshots
-
-## Phase 11 — Incident Investigation
-
-* [ ] Identify initial suspicious activity
-* [ ] Review failed authentication
-* [ ] Identify subsequent successful authentication
-* [ ] Investigate account creation
-* [ ] Investigate administrator-group membership
-* [ ] Investigate PowerShell execution
-* [ ] Reconstruct process relationships
-* [ ] Investigate discovery activity
-* [ ] Investigate scheduled-task creation
-* [ ] Build combined incident timeline
-* [ ] Assess scope
-* [ ] Document findings
-
-## Phase 12 — MITRE ATT&CK Mapping
-
-* [ ] Map account creation
-* [ ] Map account manipulation
-* [ ] Map PowerShell execution
-* [ ] Map scheduled-task behavior
-* [ ] Map user discovery
-* [ ] Map system-information discovery
-* [ ] Map network-configuration discovery
-* [ ] Map process discovery
-* [ ] Document limitations of ATT&CK mappings
-
-## Phase 13 — Containment
-
-* [ ] Preserve evidence
-* [ ] Remove scheduled task
-* [ ] Remove temporary account
-* [ ] Verify containment on endpoint
-* [ ] Verify containment activity in Splunk
-* [ ] Document containment actions
-
-## Phase 14 — Incident Report
-
-* [ ] Write executive summary
-* [ ] Document data sources
-* [ ] Create UTC timeline
-* [ ] Document technical findings
-* [ ] Document ATT&CK mappings
-* [ ] Document false positives
-* [ ] Document detection limitations
-* [ ] Document containment
-* [ ] Document lessons learned
-* [ ] Review report for sensitive information
+* [ ] Complete incident report
+* [ ] Add sanitized evidence and screenshots
+* [ ] Review repository for sensitive information
+* [ ] Update README with final results
+* [ ] Mark project complete

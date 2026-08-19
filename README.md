@@ -1,182 +1,132 @@
 # Splunk SIEM Detection & Incident Investigation Lab
 
-**Project Status: In Progress**
+**Status: In Progress**
 
-A hands-on cybersecurity lab focused on building a small Security Information and Event Management (SIEM) environment using Splunk, collecting Windows endpoint telemetry, developing detections, and investigating a controlled security incident.
+A hands-on cybersecurity lab focused on building a small Splunk SIEM environment, collecting Windows endpoint telemetry, developing detections, and investigating a controlled security incident.
 
-This repository is being developed incrementally. Configuration files, detections, documentation, screenshots, and investigation results will be added as each stage of the lab is completed.
+The project is being built incrementally, with configurations, detections, screenshots, and investigation results added as each stage is completed.
 
 ## Project Goals
 
-The goal of this project is to gain practical experience with the tools and workflows commonly used in an entry-level Security Operations Center (SOC).
+This lab is designed to provide practical experience with common SOC and SIEM workflows, including:
 
-The completed lab is planned to include:
+* Deploying and configuring Splunk Enterprise
+* Forwarding Windows logs with Splunk Universal Forwarder
+* Collecting Windows Security, Sysmon, PowerShell, and Task Scheduler telemetry
+* Writing SPL searches and detections
+* Creating Splunk alerts and dashboards
+* Writing Sigma rules
+* Investigating suspicious activity across multiple log sources
+* Mapping observed behavior to MITRE ATT&CK
+* Documenting findings in an incident report
 
-* Deployment of Splunk Enterprise on an Ubuntu server
-* Deployment of a Windows 11 endpoint
-* Windows log forwarding with Splunk Universal Forwarder
-* Windows Security Event Log collection
-* Sysmon telemetry collection
-* PowerShell Operational logging
+## Lab Environment
+
+The lab uses two VirtualBox virtual machines connected through an isolated internal network.
+
+| System           | OS               | IP            | Purpose                    |
+| ---------------- | ---------------- | ------------- | -------------------------- |
+| `SPLUNK-SERVER`  | Ubuntu 24.04 LTS | `10.10.20.10` | Splunk Enterprise SIEM     |
+| `WIN11-ENDPOINT` | Windows 11       | `10.10.20.20` | Monitored Windows endpoint |
+
+The Windows endpoint will run:
+
+* Splunk Universal Forwarder
+* Sysmon
+* Windows Security auditing
+* PowerShell logging
 * Task Scheduler logging
-* SPL search development
-* Detection engineering and alert creation
-* Sigma detection rules
-* SOC dashboard creation
-* Multi-source incident investigation
-* MITRE ATT&CK mapping
-* False-positive and detection-limitation analysis
-* Incident containment
-* A documented incident report
-* Sanitized screenshots and evidence
 
-## Planned Architecture
+Telemetry will be forwarded to Splunk for searching, detection, visualization, and investigation.
 
-The environment will consist primarily of two isolated virtual machines:
+The systems will be isolated from external networks during incident simulation.
 
-```text
-                 Internal Lab Network
-                    10.10.20.0/24
+## Controlled Incident Scenario
 
-       ┌──────────────────────────────┐
-       │       Splunk Server          │
-       │                              │
-       │ Ubuntu Linux                 │
-       │ Splunk Enterprise            │
-       │                              │
-       │ Receives and indexes logs    │
-       └──────────────▲───────────────┘
-                      │
-                      │ Splunk Forwarding
-                      │
-       ┌──────────────┴───────────────┐
-       │      Windows Endpoint        │
-       │                              │
-       │ Windows 11                   │
-       │ Splunk Universal Forwarder   │
-       │ Sysmon                       │
-       │ Windows Event Logs           │
-       └──────────────────────────────┘
-```
+Once telemetry collection is working, the Windows endpoint will generate a safe simulated incident involving:
 
-The virtual machines will be isolated from external networks during the controlled incident-generation portion of the lab.
+* Multiple failed authentication attempts
+* A successful authentication
+* Creation of a temporary local account
+* Addition of that account to the Administrators group
+* Harmless encoded PowerShell execution
+* Windows system-discovery commands
+* Creation of a benign scheduled task
 
-## Planned Telemetry
+The resulting activity will be analyzed in Splunk and later cleaned up.
 
-The Windows endpoint will provide several sources of security telemetry, including:
-
-* Windows Security logs
-* Sysmon Operational logs
-* PowerShell Operational logs
-* Task Scheduler Operational logs
-* Windows System and Application logs
-* Microsoft Defender logs where applicable
-
-These events will be forwarded to Splunk for searching, correlation, visualization, and investigation.
-
-## Planned Incident Scenario
-
-Once data collection is working, a controlled and non-malicious scenario will be generated on the Windows endpoint.
-
-Planned activity includes:
-
-1. Multiple failed authentication attempts
-2. A subsequent successful authentication
-3. Creation of a temporary local user
-4. Addition of the user to the local Administrators group
-5. Execution of a harmless encoded PowerShell command
-6. Execution of Windows discovery utilities
-7. Creation of a benign scheduled task
-8. Investigation of the resulting telemetry
-9. Removal of the temporary account and scheduled task
-
-No malware is planned for this lab.
+No malware is used in this lab.
 
 ## Planned Detections
 
-SPL detections will be developed for activity such as:
+SPL detections will cover activity such as:
 
 * Failed-logon bursts
 * Local account creation
-* New accounts added to the Administrators group
-* Encoded PowerShell execution
+* Administrator-group membership changes
+* Encoded PowerShell
 * Scheduled-task creation
-* Bursts of system-discovery commands
-* SIEM ingestion latency and data-quality issues
+* System-discovery command bursts
+* SIEM ingestion and data-quality issues
 
-Several detections will also be represented as Sigma rules to practice writing SIEM-independent detection logic.
+Selected detections will also be recreated as Sigma rules.
 
-## Planned Investigation
+## Investigation
 
-After generating the scenario, the investigation will attempt to reconstruct what occurred by correlating multiple log sources.
+The final investigation will correlate authentication, account-management, process, PowerShell, and scheduled-task telemetry to reconstruct the incident.
 
-The investigation will include:
+The completed project will include:
 
-* Authentication activity
-* Account-management events
-* Process execution
-* PowerShell activity
-* Scheduled-task activity
-* Parent/child process relationships
-* Event timestamps
-* User context
-* Detection alerts
+* Detection results
+* A combined incident timeline
+* MITRE ATT&CK mappings
+* False-positive and detection-limit analysis
 * Containment actions
-
-The resulting activity will be organized into a combined incident timeline.
-
-## MITRE ATT&CK
-
-Relevant observed behaviors will be mapped to MITRE ATT&CK techniques where appropriate.
-
-The mapping will describe observed behavior rather than treating ATT&CK mappings as proof that an activity was malicious.
+* A written incident report
+* Sanitized screenshots and evidence
 
 ## Repository Structure
 
 ```text
 .
-├── architecture/       # Architecture diagrams
-├── configs/            # Sysmon and Splunk Forwarder configuration
-├── scripts/            # Lab preparation/event-generation scripts
+├── configs/
+│   ├── sysmon/
+│   └── splunk-forwarder/
+├── scripts/
 ├── detections/
-│   ├── spl/            # Splunk SPL detections
-│   └── sigma/          # Sigma rules
-├── dashboards/         # Dashboard documentation and screenshots
-├── docs/               # Roadmap, status, investigation, and reports
+│   ├── spl/
+│   └── sigma/
+├── dashboards/
+├── docs/
+│   ├── ROADMAP.md
+│   └── incident-report.md
 └── evidence/
-    ├── screenshots/    # Sanitized screenshots
-    └── sanitized/      # Reviewed evidence safe for publication
+    └── screenshots/
 ```
 
-## Current Status
+Some directories may remain empty until the corresponding phase of the project is completed.
 
-The project is currently under active development.
+## Progress
 
-See:
-
-* [`docs/STATUS.md`](docs/STATUS.md) for current progress
-* [`docs/ROADMAP.md`](docs/ROADMAP.md) for planned implementation stages
+See [`docs/ROADMAP.md`](docs/ROADMAP.md) for current progress and planned work.
 
 ## Security and Privacy
 
-Only sanitized material will be published in this repository.
+Only sanitized material will be published.
 
-The repository will not contain any of the following:
+This repository will not contain:
 
-* Passwords or credentials
-* Splunk authentication secrets
-* Session cookies
+* Passwords or authentication secrets
 * Splunk license files
-* VM disk images
-* Operating-system installation media
+* Session cookies
+* VM images or operating-system installation media
 * Personal usernames or hostnames
-* Unreviewed Windows Event Log exports
+* Unreviewed raw Windows event logs
 * Memory dumps
-* Unreviewed raw security telemetry
 * Sensitive or unrelated host data
 
 ## Disclaimer
 
 This is an educational cybersecurity lab performed in an isolated environment using systems that I control.
 
-The simulated activity is intended solely to generate defensive security telemetry for detection and incident-investigation practice.
+The simulated activity is intended solely for defensive security, detection-engineering, and incident-investigation practice.

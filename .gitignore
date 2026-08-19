@@ -1,6 +1,4 @@
-# =========================
 # Credentials / secrets
-# =========================
 .env
 .env.*
 *.key
@@ -9,35 +7,23 @@
 *.p12
 secrets/
 credentials/
-
-# Splunk credentials/config backups
 user-seed.conf
 passwd
 splunk.secret
 
-# =========================
-# Splunk runtime data
-# =========================
+# Splunk / log output
 *.log
 *.pid
 *.lock
 
-# =========================
-# Raw evidence / logs
-# =========================
+# Raw security evidence
 *.evtx
 *.pcap
 *.pcapng
 *.dmp
 *.raw
 
-# Large exports
-*.csv
-*.jsonl
-
-# =========================
 # Virtual machines
-# =========================
 *.vdi
 *.vmdk
 *.vhd
@@ -45,26 +31,20 @@ splunk.secret
 *.ova
 *.ovf
 
-# =========================
 # Installers / ISOs
-# =========================
 *.iso
 *.msi
 *.deb
 *.rpm
 *.exe
 
-# =========================
 # Archives
-# =========================
 *.zip
 *.7z
 *.tar
 *.gz
 
-# =========================
 # Editor / OS files
-# =========================
 .vscode/
 .idea/
 .DS_Store
