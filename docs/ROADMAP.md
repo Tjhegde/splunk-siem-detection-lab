@@ -50,14 +50,14 @@ This roadmap tracks the development of the Splunk SIEM Detection & Incident Inve
 
 ## Phase 6 — Incident Investigation and Containment
 
-* [ ] Investigate authentication activity
-* [ ] Investigate account and privilege changes
-* [ ] Investigate PowerShell and process activity
-* [ ] Investigate scheduled-task activity
-* [ ] Reconstruct the incident timeline
-* [ ] Map observed behavior to MITRE ATT&CK
-* [ ] Remove the temporary account and scheduled task
-* [ ] Verify containment in Splunk
+* [x] Investigate authentication activity
+* [x] Investigate account and privilege changes
+* [x] Investigate PowerShell and process activity
+* [x] Investigate scheduled-task activity
+* [x] Reconstruct the incident timeline
+* [x] Map observed behavior to MITRE ATT&CK
+* [x] Remove the temporary account and scheduled task
+* [x] Verify containment in Splunk
 
 ## Phase 7 — Documentation and Portfolio Cleanup
 
