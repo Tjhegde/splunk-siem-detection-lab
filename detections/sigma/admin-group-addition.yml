@@ -1,0 +1,22 @@
+
+title: Account Added to Local Administrators Group
+status: experimental
+description: Detects an account being added to the built-in Windows Administrators group.
+author: SIEM Lab
+date: 2026-10-31
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4732
+    TargetSid: 'S-1-5-32-544'
+  condition: selection
+fields:
+  - MemberSid
+  - SubjectUserName
+  - TargetSid
+falsepositives:
+  - Authorized administrative changes
+  - Legitimate account provisioning
+level: high

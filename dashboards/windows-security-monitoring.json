@@ -1,0 +1,174 @@
+{
+  "visualizations": {
+    "viz_ePPvgLfz": {
+      "type": "splunk.line",
+      "title": "Windows Event Volume",
+      "description": "Windows telemetry by source in 15-minute intervals",
+      "options": {},
+      "dataSources": {
+        "primary": "ds_J2RCYyxu"
+      }
+    },
+    "viz_hIG0YrQh": {
+      "type": "splunk.table",
+      "title": "Failed Logons by Account",
+      "description": "Event 4625 grouped by endpoint and account",
+      "options": {},
+      "dataSources": {
+        "primary": "ds_ZfTkn7Aw"
+      }
+    },
+    "viz_r7czpwFq": {
+      "type": "splunk.table",
+      "title": "Local Administrator Group Additions",
+      "description": "Event 4732 changes to the built-in Administrators group",
+      "options": {},
+      "dataSources": {
+        "primary": "ds_FjSfKGrC"
+      }
+    },
+    "viz_klvMSJtt": {
+      "type": "splunk.table",
+      "title": "Encoded PowerShell Executions",
+      "description": "Windows Security Event 4688 process command lines",
+      "options": {},
+      "dataSources": {
+        "primary": "ds_6XEVWz1m"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_J2RCYyxu": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=windows\n| timechart span=15m count by source limit=10 useother=f"
+      },
+      "name": "Windows Event Volume"
+    },
+    "ds_ZfTkn7Aw": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=windows\n| rex field=_raw \"<EventID[^>]*>(?<event_id>\\d+)</EventID>\"\n| where event_id=\"4625\"\n| rex field=_raw \"<Data[^>]*Name=.TargetUserName.[^>]*>(?<target_user>[^<]*)\"\n| where isnotnull(target_user) AND target_user!=\"-\"\n| stats count as failed_logons by host target_user\n| sort -failed_logons"
+      },
+      "name": "Failed Logons By Account"
+    },
+    "ds_FjSfKGrC": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=windows\n| rex field=_raw \"<EventID[^>]*>(?<event_id>\\d+)</EventID>\"\n| where event_id=\"4732\"\n| rex field=_raw \"<Data[^>]*Name=.TargetSid.[^>]*>(?<group_sid>[^<]*)\"\n| rex field=_raw \"<Data[^>]*Name=.MemberSid.[^>]*>(?<member_sid>[^<]*)\"\n| rex field=_raw \"<Data[^>]*Name=.SubjectUserName.[^>]*>(?<actor>[^<]*)\"\n| where group_sid=\"S-1-5-32-544\"\n| table _time host actor member_sid\n| sort -_time"
+      },
+      "name": "Local Administrator Group Additions"
+    },
+    "ds_6XEVWz1m": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=windows\n| rex field=_raw \"<EventID[^>]*>(?<event_id>\\d+)</EventID>\"\n| where event_id=\"4688\"\n| rex field=_raw \"<Data[^>]*Name=.NewProcessName.[^>]*>(?<process_name>[^<]*)\"\n| rex field=_raw \"<Data[^>]*Name=.CommandLine.[^>]*>(?<command_line>[^<]*)\"\n| rex field=_raw \"<Data[^>]*Name=.ParentProcessName.[^>]*>(?<parent_process>[^<]*)\"\n| where match(process_name,\"(?i)(powershell|pwsh)\\.exe$\")\n  AND match(command_line,\"(?i)(^|[[:space:]])-(encodedcommand|enc|e)([[:space:]]|$)\")\n| eval command_preview=substr(command_line,1,140)\n| table _time host process_name parent_process command_preview\n| sort -_time"
+      },
+      "name": "Encoded PowerShell Executions"
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "latest": "$global_time.latest$",
+            "earliest": "$global_time.earliest$"
+          }
+        }
+      },
+      "ds.spl2": {
+        "options": {
+          "queryParameters": {
+            "latest": "$global_time.latest$",
+            "earliest": "$global_time.earliest$"
+          }
+        }
+      }
+    },
+    "visualizations": {
+      "global": {
+        "showProgressBar": true
+      }
+    }
+  },
+  "inputs": {
+    "input_global_trp": {
+      "type": "input.timerange",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      },
+      "title": "Global Time Range"
+    }
+  },
+  "layout": {
+    "options": {
+      "showTitleAndDescription": true
+    },
+    "globalInputs": [
+      "input_global_trp"
+    ],
+    "tabs": {
+      "items": [
+        {
+          "layoutId": "layout_7wujdlIq",
+          "label": "Security Overview"
+        }
+      ]
+    },
+    "layoutDefinitions": {
+      "layout_7wujdlIq": {
+        "type": "grid",
+        "options": {
+          "width": 1440,
+          "gutterSize": 12
+        },
+        "structure": [
+          {
+            "item": "viz_ePPvgLfz",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 310
+            }
+          },
+          {
+            "item": "viz_hIG0YrQh",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 310,
+              "w": 720,
+              "h": 295
+            }
+          },
+          {
+            "item": "viz_r7czpwFq",
+            "type": "block",
+            "position": {
+              "x": 720,
+              "y": 310,
+              "w": 720,
+              "h": 295
+            }
+          },
+          {
+            "item": "viz_klvMSJtt",
+            "type": "block",
+            "position": {
+              "x": 0,
+              "y": 605,
+              "w": 1440,
+              "h": 320
+            }
+          }
+        ]
+      }
+    }
+  },
+  "description": "Centralized Windows Security monitoring — event volume, failed logons, local administrator group changes, and encoded PowerShell execution.",
+  "title": "Windows Security Monitoring"
+}

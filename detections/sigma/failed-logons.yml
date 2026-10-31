@@ -1,0 +1,42 @@
+
+title: Windows Failed Logon Event
+name: siem_failed_logon
+status: experimental
+description: Identifies Windows Security events for failed authentication.
+author: SIEM Lab
+date: 2026-10-31
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4625
+  condition: selection
+fields:
+  - TargetUserName
+  - TargetDomainName
+falsepositives:
+  - Mistyped passwords
+  - Expired credentials
+level: low
+
+---
+title: Repeated Failed Windows Logons
+status: experimental
+description: Detects three or more failed logons for the same account within 15 minutes.
+author: SIEM Lab
+date: 2026-10-31
+correlation:
+  type: event_count
+  rules:
+    - siem_failed_logon
+  group-by:
+    - Computer
+    - TargetUserName
+  timespan: 2h
+  condition:
+    gte: 3
+falsepositives:
+  - Users repeatedly entering incorrect passwords
+  - Authentication troubleshooting
+level: medium
