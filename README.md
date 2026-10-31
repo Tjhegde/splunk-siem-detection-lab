@@ -100,8 +100,7 @@ The completed project will include:
 ├── docs/
 │   ├── ROADMAP.md
 │   └── incident-report.md
-└── evidence/
-    └── screenshots/
+└── screenshots/
 ```
 
 Some directories may remain empty until the corresponding phase of the project is completed.
