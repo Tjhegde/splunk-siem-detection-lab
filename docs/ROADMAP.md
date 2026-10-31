@@ -11,35 +11,35 @@ This roadmap tracks the development of the Splunk SIEM Detection & Incident Inve
 
 ## Phase 2 — Build the SIEM Environment
 
-* [ ] Create Ubuntu Splunk server VM
-* [ ] Install and configure Splunk Enterprise
-* [ ] Create Windows 11 endpoint VM
-* [ ] Install Splunk Universal Forwarder
-* [ ] Install and configure Sysmon
-* [ ] Enable Windows auditing and PowerShell logging
-* [ ] Configure isolated VirtualBox network
-* [ ] Verify connectivity between endpoint and Splunk
+* [x] Create Ubuntu Splunk server VM
+* [x] Install and configure Splunk Enterprise
+* [x] Create Windows 11 endpoint VM
+* [x] Install Splunk Universal Forwarder
+* [x] Install and configure Sysmon
+* [x] Enable Windows auditing and PowerShell logging
+* [x] Configure isolated VirtualBox network
+* [x] Verify connectivity between endpoint and Splunk
 
 ## Phase 3 — Configure and Validate Telemetry
 
-* [ ] Forward Windows Security logs
-* [ ] Forward Sysmon logs
-* [ ] Forward PowerShell logs
-* [ ] Forward Task Scheduler logs
-* [ ] Validate hosts, timestamps, and sourcetypes
-* [ ] Verify event ingestion and latency
-* [ ] Capture clean VM snapshots
+* [x] Forward Windows Security logs
+* [x] Forward Sysmon logs
+* [x] Forward PowerShell logs
+* [x] Forward Task Scheduler logs
+* [x] Validate hosts, timestamps, and sourcetypes
+* [x] Verify event ingestion and latency
+* [x] Capture clean VM snapshots
 
 ## Phase 4 — Generate and Detect Suspicious Activity
 
-* [ ] Generate controlled authentication activity
-* [ ] Create and privilege a temporary local account
-* [ ] Execute harmless encoded PowerShell
-* [ ] Execute system-discovery commands
-* [ ] Create a benign scheduled task
-* [ ] Develop and validate SPL detections
-* [ ] Configure Splunk alerts
-* [ ] Document false positives and detection limitations
+* [x] Generate controlled authentication activity
+* [x] Create and privilege a temporary local account
+* [x] Execute harmless encoded PowerShell
+* [x] Execute system-discovery commands
+* [x] Create a benign scheduled task
+* [x] Develop and validate SPL detections
+* [x] Configure Splunk alerts
+* [x] Document false positives and detection limitations
 
 ## Phase 5 — Detection Engineering and Visualization
 

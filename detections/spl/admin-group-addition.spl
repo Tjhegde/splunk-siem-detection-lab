@@ -1,0 +1,13 @@
+index=windows earliest=-15m
+```Detection: Account added to the local Administrators group (Event ID 4732).```
+```Alert: Any new member added to the built-in Administrators group.```
+```False positives: Authorized administrative changes, IT maintenance, or account provisioning.```
+```Limitation: Identifies membership changes but cannot establish whether they were authorized.```
+| rex field=_raw "<EventID[^>]*>(?<event_id>\d+)</EventID>"
+| where event_id="4732"
+| rex field=_raw "<Data[^>]*Name=.TargetSid.[^>]*>(?<group_sid>[^<]*)"
+| rex field=_raw "<Data[^>]*Name=.MemberSid.[^>]*>(?<member_sid>[^<]*)"
+| rex field=_raw "<Data[^>]*Name=.SubjectUserName.[^>]*>(?<actor>[^<]*)"
+| where group_sid="S-1-5-32-544"
+| table _time host actor member_sid group_sid
+| sort -_time

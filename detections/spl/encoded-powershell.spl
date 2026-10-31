@@ -1,0 +1,14 @@
+index=windows earliest=-15m
+```Detection: PowerShell executed with an encoded command (Security Event ID 4688).```
+```Alert: A PowerShell process starts with -EncodedCommand or -enc in its command line.```
+```False positives: Legitimate administration scripts, automation, or management tools.```
+```Limitation: Requires process creation auditing with command-line capture enabled; does not detect every encoded-command abbreviation or obfuscation technique.```
+| rex field=_raw "<EventID[^>]*>(?<event_id>\d+)</EventID>"
+| where event_id="4688"
+| rex field=_raw "<Data[^>]*Name=.NewProcessName.[^>]*>(?<process_name>[^<]*)"
+| rex field=_raw "<Data[^>]*Name=.CommandLine.[^>]*>(?<command_line>[^<]*)"
+| rex field=_raw "<Data[^>]*Name=.ParentProcessName.[^>]*>(?<parent_process>[^<]*)"
+| where (like(lower(process_name),"%powershell.exe") OR like(lower(process_name),"%pwsh.exe"))
+    AND (like(lower(command_line),"%-encodedcommand%") OR like(lower(command_line),"% -enc %"))
+| table _time host process_name parent_process command_line
+| sort -_time

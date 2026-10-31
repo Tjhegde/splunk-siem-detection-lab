@@ -1,0 +1,13 @@
+index=windows earliest=-15m
+```Detection: Repeated failed authentication attempts (Event ID 4625).```
+```Alert: Three or more failures for the same account within 15 minutes.```
+```False positives: Mistyped passwords, expired credentials, or user troubleshooting.```
+```Limitation: Counts failures per host/account; does not distinguish source IPs or logon types.```
+| rex field=_raw "<EventID[^>]*>(?<event_id>\d+)</EventID>"
+| where event_id="4625"
+| rex field=_raw "<Data[^>]*Name=.TargetUserName.[^>]*>(?<target_user>[^<]*)"
+| where isnotnull(target_user) AND target_user!="-"
+| stats count as failures min(_time) as first_seen max(_time) as last_seen by host target_user
+| where failures>=3
+| convert ctime(first_seen) ctime(last_seen)
+| sort -failures
