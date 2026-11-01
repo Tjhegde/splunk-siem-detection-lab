@@ -1,131 +1,103 @@
 # Splunk SIEM Detection & Incident Investigation Lab
 
-**Status: In Progress**
+**Status: Complete**
 
-A hands-on cybersecurity lab focused on building a small Splunk SIEM environment, collecting Windows endpoint telemetry, developing detections, and investigating a controlled security incident.
+A hands-on cybersecurity project focused on building a Splunk SIEM environment, detecting suspicious Windows activity, and investigating a controlled security incident.
 
-The project is being built incrementally, with configurations, detections, screenshots, and investigation results added as each stage is completed.
-
-## Project Goals
-
-This lab is designed to provide practical experience with common SOC and SIEM workflows, including:
-
-* Deploying and configuring Splunk Enterprise
-* Forwarding Windows logs with Splunk Universal Forwarder
-* Collecting Windows Security, Sysmon, PowerShell, and Task Scheduler telemetry
-* Writing SPL searches and detections
-* Creating Splunk alerts and dashboards
-* Writing Sigma rules
-* Investigating suspicious activity across multiple log sources
-* Mapping observed behavior to MITRE ATT&CK
-* Documenting findings in an incident report
+The lab demonstrates practical experience with Windows log collection, SPL detection engineering, scheduled alerting, security monitoring, incident investigation, and containment verification.
 
 ## Lab Environment
 
-The lab uses two VirtualBox virtual machines connected through an isolated internal network.
+The environment consists of two VirtualBox virtual machines connected through an isolated internal network.
 
-| System           | OS               | IP            | Purpose                    |
-| ---------------- | ---------------- | ------------- | -------------------------- |
-| `SPLUNK-SERVER`  | Ubuntu 24.04 LTS | `10.10.20.10` | Splunk Enterprise SIEM     |
-| `WIN11-ENDPOINT` | Windows 11       | `10.10.20.20` | Monitored Windows endpoint |
+| System | Operating System | IP Address | Purpose |
+|---|---|---|---|
+| SPLUNK-SERVER | Ubuntu 24.04 LTS | 10.10.20.10 | Splunk Enterprise |
+| WIN11-ENDPOINT | Windows 11 | 10.10.20.20 | Monitored endpoint |
 
-The Windows endpoint will run:
+**Technologies:** Splunk Enterprise, Splunk Universal Forwarder, Windows Event Logs, PowerShell, SPL, Sigma, VirtualBox, Ubuntu Linux.
 
-* Splunk Universal Forwarder
-* Sysmon
-* Windows Security auditing
-* PowerShell logging
-* Task Scheduler logging
+Windows Security, PowerShell Operational, and Task Scheduler Operational events were forwarded to Splunk for analysis.
 
-Telemetry will be forwarded to Splunk for searching, detection, visualization, and investigation.
+The lab used raw Windows event XML and manual SPL field extraction without the Splunk Add-on for Microsoft Windows.
 
-The systems will be isolated from external networks during incident simulation.
+## Detection Engineering
 
-## Controlled Incident Scenario
+Implemented and tested three SPL detections with scheduled Splunk alerts.
 
-Once telemetry collection is working, the Windows endpoint will generate a safe simulated incident involving:
+| Detection | Event ID | Purpose |
+|---|---|---|
+| Repeated Failed Logons | 4625 | Identify three or more failed logons for the same account and host within two hours |
+| Local Administrator Group Addition | 4732 | Monitor additions to the built-in Administrators group |
+| Encoded PowerShell Execution | 4688 | Detect PowerShell processes launched with encoded-command arguments |
 
-* Multiple failed authentication attempts
-* A successful authentication
-* Creation of a temporary local account
-* Addition of that account to the Administrators group
-* Harmless encoded PowerShell execution
-* Windows system-discovery commands
-* Creation of a benign scheduled task
+All three alerts were successfully triggered and verified in Splunk.
 
-The resulting activity will be analyzed in Splunk and later cleaned up.
+Equivalent Sigma definitions were created to document the detection logic in a vendor-neutral format.
 
-No malware is used in this lab.
+**Detection files:**
+- [SPL Detections](detections/spl/)
+- [Sigma Rules](detections/sigma/)
 
-## Planned Detections
+### Triggered Alerts
 
-SPL detections will cover activity such as:
+![Splunk Triggered Alerts showing all three security detections](screenshots/phase4-triggered-alerts.png)
 
-* Failed-logon bursts
-* Local account creation
-* Administrator-group membership changes
-* Encoded PowerShell
-* Scheduled-task creation
-* System-discovery command bursts
-* SIEM ingestion and data-quality issues
+## Security Monitoring Dashboard
 
-Selected detections will also be recreated as Sigma rules.
+Built a Splunk Dashboard Studio dashboard containing four monitoring panels:
 
-## Investigation
+- Windows event volume over time
+- Failed logons by account
+- Local Administrators group additions
+- Encoded PowerShell executions
 
-The final investigation will correlate authentication, account-management, process, PowerShell, and scheduled-task telemetry to reconstruct the incident.
+The dashboard includes a global time-range selector for investigating different periods of activity.
 
-The completed project will include:
+![Windows Security Monitoring Dashboard](screenshots/phase5-security-dashboard.png)
 
-* Detection results
-* A combined incident timeline
-* MITRE ATT&CK mappings
-* False-positive and detection-limit analysis
-* Containment actions
-* A written incident report
-* Sanitized screenshots and evidence
+[View Dashboard JSON](dashboards/windows-security-monitoring.json)
 
-## Repository Structure
+## Incident Investigation
 
-```text
-.
-├── configs/
-│   ├── sysmon/
-│   └── splunk-forwarder/
-├── scripts/
-├── detections/
-│   ├── spl/
-│   └── sigma/
-├── dashboards/
-├── docs/
-│   ├── ROADMAP.md
-│   └── incident-report.md
-└── screenshots/
-```
+Conducted a controlled simulation involving account creation, authentication failures, successful logons, privilege changes, encoded PowerShell execution, system discovery, and scheduled-task creation.
 
-Some directories may remain empty until the corresponding phase of the project is completed.
+The investigation included:
 
-## Progress
+- Correlating events across multiple Windows log sources.
+- Reconstructing the sequence of activity.
+- Reviewing triggered alerts and associated event evidence.
+- Mapping observed behaviors to MITRE ATT&CK.
+- Investigating account deletion and administrator-group membership removals.
+- Verifying removal of the temporary account and scheduled task.
 
-See [`docs/ROADMAP.md`](docs/ROADMAP.md) for current progress and planned work.
+The broad investigation search analyzed **1,593 Windows events across nine selected event IDs**, with a focused timeline identifying **35 relevant simulated activity events**.
 
-## Security and Privacy
+All three detection alerts triggered successfully, and cleanup was verified through Windows event records and endpoint checks.
 
-Only sanitized material will be published.
+### Investigation Evidence
 
-This repository will not contain:
+![Summarized Windows security incident events](screenshots/phase6-incident-summary.png)
 
-* Passwords or authentication secrets
-* Splunk license files
-* Session cookies
-* VM images or operating-system installation media
-* Personal usernames or hostnames
-* Unreviewed raw Windows event logs
-* Memory dumps
-* Sensitive or unrelated host data
+**Additional evidence:**
+- [Chronological Incident Timeline](screenshots/phase6-incident-timeline.png)
+- [Incident Cleanup Verification](screenshots/phase6-incident-cleanup.png)
+- [Full Incident Investigation Report](docs/incident-report.md)
+
+## Key Takeaways
+
+- Configured end-to-end Windows log forwarding into Splunk Enterprise.
+- Developed and tested SPL detections against raw Windows event XML.
+- Configured three scheduled security alerts and validated their triggering behavior.
+- Adapted the encoded PowerShell detection to use Security Event ID 4688 when Sysmon Event ID 1 was unavailable for the tested activity.
+- Built a centralized security monitoring dashboard with multiple investigation views.
+- Reconstructed a simulated incident using authentication, account management, process creation, and scheduled-task telemetry.
+- Documented MITRE ATT&CK mappings, false positives, investigation limitations, and cleanup verification.
+
+## Project Roadmap
+
+See [ROADMAP.md](docs/ROADMAP.md) for the project phases and implementation details.
 
 ## Disclaimer
 
-This is an educational cybersecurity lab performed in an isolated environment using systems that I control.
-
-The simulated activity is intended solely for defensive security, detection-engineering, and incident-investigation practice.
+This project was performed in an isolated virtual lab using systems under my control. All suspicious activity was intentionally simulated using harmless commands for defensive security practice. No malware or unauthorized access was involved.
