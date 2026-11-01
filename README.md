@@ -89,7 +89,6 @@ All three detection alerts triggered successfully, and cleanup was verified thro
 - Configured end-to-end Windows log forwarding into Splunk Enterprise.
 - Developed and tested SPL detections against raw Windows event XML.
 - Configured three scheduled security alerts and validated their triggering behavior.
-- Adapted the encoded PowerShell detection to use Security Event ID 4688 when Sysmon Event ID 1 was unavailable for the tested activity.
 - Built a centralized security monitoring dashboard with multiple investigation views.
 - Reconstructed a simulated incident using authentication, account management, process creation, and scheduled-task telemetry.
 - Documented MITRE ATT&CK mappings, false positives, investigation limitations, and cleanup verification.
