@@ -61,8 +61,8 @@ This roadmap tracks the development of the Splunk SIEM Detection & Incident Inve
 
 ## Phase 7 — Documentation and Portfolio Cleanup
 
-* [ ] Complete incident report
-* [ ] Add screenshots
-* [ ] Review repository for sensitive information
-* [ ] Update README with final results
-* [ ] Mark project complete
+* [x] Complete incident report
+* [x] Add screenshots
+* [x] Review repository for sensitive information
+* [x] Update README with final results
+* [x] Mark project complete
